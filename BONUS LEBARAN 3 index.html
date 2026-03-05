@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CAGARBOLA - Spesial Idul Fitri 1447 H</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* CSS Variables - Premium Emerald & Gold Theme */
+        :root {
+            --color-bg-deep: #021a12;
+            --color-primary: #052e20;
+            --color-primary-light: #0f5132;
+            --color-gold: #fbbf24;
+            --color-gold-light: #fef08a;
+            --color-gold-dark: #b45309;
+            --color-white: #ffffff;
+            --color-text-dim: #d1d5db;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --shadow-gold: 0 0 20px rgba(251, 191, 36, 0.5);
+            --shadow-green: 0 0 30px rgba(15, 81, 50, 0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-deep);
+            color: var(--color-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Latar Belakang & Animasi */
+        .background-decorations {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 10%, rgba(20, 83, 45, 0.4) 0%, var(--color-bg-deep) 70%);
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: drift 15s infinite alternate ease-in-out;
+        }
+
+        .orb-1 { width: 300px; height: 300px; background: var(--color-primary-light); top: -50px; left: -100px; }
+        .orb-2 { width: 250px; height: 250px; background: rgba(251, 191, 36, 0.2); bottom: 50px; right: -50px; animation-delay: -5s; }
+
+        @keyframes drift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+        .moon {
+            position: absolute;
+            top: 5%; right: 5%; width: 15vh; height: 15vh;
+            border-radius: 50%;
+            box-shadow: inset -25px 5px 0 0 rgba(251, 191, 36, 0.15);
+            transform: rotate(-15deg);
+        }
+
+        /* Kontainer Utama */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: calc(100vh - 40px);
+            padding: 60px 1rem 2vh 1rem;
+            max-width: 450px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; width: 100%; }
+        .pill-badge {
+            background: rgba(15, 81, 50, 0.6);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            color: var(--color-gold-light);
+            padding: 0.4rem 1.2rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .main-title { font-size: clamp(2.2rem, 10vw, 3rem); font-weight: 900; line-height: 1.1; }
+        .text-gold { color: var(--color-gold); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); }
+        .glow { text-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
+
+        /* Roda Keberuntungan */
+        .wheel-section { position: relative; width: 100%; display: flex; justify-content: center; align-items: center; flex-grow: 1; min-height: 300px; }
+        .wheel-container {
+            position: relative;
+            width: clamp(300px, 92vw, 420px);
+            height: clamp(300px, 92vw, 420px);
+            border-radius: 50%;
+            box-shadow: 0 0 0 12px rgba(20, 83, 45, 0.4), 0 0 40px rgba(251, 191, 36, 0.3);
+        }
+
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            border: 6px solid var(--color-gold);
+            position: relative; overflow: hidden;
+            transition: transform 5s cubic-bezier(0.15, 0.85, 0.15, 1);
+        }
+
+        .segment-text {
+            position: absolute; top: 50%; left: 50%; width: 50%; height: 24px;
+            margin-top: -12px; transform-origin: 0 50%;
+            display: flex; align-items: center; justify-content: flex-end;
+            padding-right: 30px; font-weight: 900; color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+        }
+
+        .pointer {
+            position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+            width: 44px; height: 55px; background: linear-gradient(135deg, #fef08a, #ca8a04);
+            clip-path: polygon(50% 100%, 15% 15%, 85% 15%); z-index: 20;
+        }
+
+        /* Modal & Tombol */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(2, 26, 18, 0.85);
+            backdrop-filter: blur(12px); z-index: 100;
+            display: none; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(20, 83, 45, 0.6), rgba(5, 46, 32, 0.8));
+            border: 1px solid var(--color-gold); border-radius: 28px;
+            padding: 2.5rem 2rem; width: 100%; max-width: 420px; text-align: center;
+        }
+
+        .btn-primary, .btn-spin {
+            background: linear-gradient(to bottom, #fde047, #eab308, #ca8a04);
+            color: #451a03; border: none; padding: 1.2rem; border-radius: 999px;
+            font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase;
+        }
+
+        .input-group input {
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--color-gold);
+            padding: 1rem; border-radius: 12px; color: white; margin-bottom: 1.5rem;
+        }
+
+        /* Ticker */
+        .ticker-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 40px;
+            background: rgba(5, 46, 32, 0.9); overflow: hidden; z-index: 50;
+        }
+        .ticker-track { display: flex; white-space: nowrap; animation: marquee 30s linear infinite; align-items: center; height: 100%; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    </style>
+</head>
+
+<body>
+    <div class="background-decorations">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="moon"></div>
+    </div>
+
+    <div id="entry-modal" class="modal-overlay active">
+        <div class="glass-panel">
+            <h2 class="text-gold">CAGABOLA</h2>
+            <p style="margin-bottom: 1.5rem;">Silakan masukkan nama Anda untuk klaim bonus Lebaran.</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Nama Pengguna..." required>
+                </div>
+                <button type="submit" class="btn-primary">MASUK & PUTAR</button>
+            </form>
+        </div>
+    </div>
+
+    <main class="app-container">
+        <header>
+            <div class="pill-badge">Spesial Idul Fitri 1447 H</div>
+            <h1 class="main-title"><span class="text-white">CAGABOLA</span> <span class="text-gold glow">LEBARAN</span></h1>
+        </header>
+
+        <section class="wheel-section">
+            <div class="wheel-container">
+                <div class="pointer"></div>
+                <div class="wheel" id="wheel"></div>
+                <div style="position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:60px; height:60px; background:var(--color-bg-deep); border:4px solid var(--color-gold); border-radius:50%; z-index:10;"></div>
+            </div>
+        </section>
+
+        <div class="controls">
+            <button id="btn-spin" class="btn-spin">PUTAR SEKARANG</button>
+        </div>
+    </main>
+
+    <div class="ticker-container">
+        <div class="ticker-track" id="ticker-track"></div>
+    </div>
+
+    <div id="result-modal" class="modal-overlay">
+        <div class="glass-panel">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+            <h2 class="text-gold">SELAMAT!</h2>
+            <p>Anda memenangkan:</p>
+            <div style="background: rgba(0,0,0,0.4); border: 2px dashed var(--color-gold); padding: 1.5rem; margin: 1rem 0; border-radius: 15px;">
+                <h3 id="prize-text" class="text-gold">IPHONE 17 PROMAX</h3>
+            </div>
+            <p style="font-size: 0.8rem; margin-bottom: 1.5rem;">Silakan klik tombol di bawah untuk klaim ke dashboard <b>CAGABOLA</b>.</p>
+            <button id="btn-claim" class="btn-primary">AMBIL BONUS SEKARANG</button>
+        </div>
+    </div>
+
+    <script>
+        const DASHBOARD_LINK = "https://cagarapa.com/dashboard";
+        const SEGMENTS = [
+            { label: '250rb', bg: '#052e20' },      // 23%
+            { label: '450rb', bg: '#fbbf24' },      // 20%
+            { label: '700rb', bg: '#052e20' },      // 9%
+            { label: '900rb', bg: '#fbbf24' },      // 5%
+            { label: '1,5 Juta', bg: '#052e20' },      // 10%
+            { label: 'HONDA VARIO', bg: '#fbbf24' },      // 3%
+            { label: '3 Juta', bg: '#052e20' },      // 5%
+            { label: '100rb', bg: '#fbbf24' }      // 25%
+        ];
+
+        const wheel = document.getElementById('wheel');
+        const btnSpin = document.getElementById('btn-spin');
+        const loginForm = document.getElementById('login-form');
+        const entryModal = document.getElementById('entry-modal');
+        const resultModal = document.getElementById('result-modal');
+        const prizeText = document.getElementById('prize-text');
+        const btnClaim = document.getElementById('btn-claim');
+
+        let currentRotation = 0;
+
+        // Inisialisasi Roda
+        function initWheel() {
+            const anglePerSegment = 360 / SEGMENTS.length;
+            let gradient = SEGMENTS.map((s, i) => `${s.bg} ${i * anglePerSegment}deg ${(i + 1) * anglePerSegment}deg`).join(', ');
+            wheel.style.background = `conic-gradient(${gradient})`;
+
+            SEGMENTS.forEach((s, i) => {
+                const el = document.createElement('div');
+                el.className = 'segment-text';
+                const rotation = (i * anglePerSegment) + (anglePerSegment / 2) - 90;
+                el.style.transform = `rotate(${rotation}deg)`;
+                el.innerHTML = `<span>${s.label}</span>`;
+                wheel.appendChild(el);
+            });
+        }
+
+        // Ticker
+        function initTicker() {
+            const track = document.getElementById('ticker-track');
+            const items = ["CAGARBOLA: User budi*** menang 3 juta rb!", "CAGARBOLA: User ani*** menang HONDA VARIO !", "CAGARBOLA: Nikmati Bonus Lebaran 1447H"];
+            track.innerHTML = `<div style="padding: 0 2rem;">${items.join(' | ')}</div>`.repeat(5);
+        }
+
+        loginForm.onsubmit = (e) => {
+            e.preventDefault();
+            entryModal.classList.remove('active');
+        };
+
+        btnSpin.onclick = () => {
+            btnSpin.disabled = true;
+            const extraDegrees = Math.floor(Math.random() * 360) + 1800; // Minimal 5 putaran
+            currentRotation += extraDegrees;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                const actualDegree = currentRotation % 360;
+                const segmentIndex = Math.floor((360 - actualDegree) / (360 / SEGMENTS.length)) % SEGMENTS.length;
+                prizeText.innerText = SEGMENTS[segmentIndex].label;
+                resultModal.classList.add('active');
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }, 5000);
+        };
+
+        btnClaim.onclick = () => {
+            window.location.href = DASHBOARD_LINK;
+        };
+
+        initWheel();
+        initTicker();
+    </script>
+</body>
+</html>
